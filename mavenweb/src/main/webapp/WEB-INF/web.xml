@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<javaee:display-name>Archetype Created Web Application</javaee:display-name>
+	
+	
+	<servlet>
+		<javaee:description></javaee:description>
+		<javaee:display-name>ServletDemo</javaee:display-name>
+		<servlet-name>ServletDemo</servlet-name>
+		<servlet-class>mavenweb.ServletDemo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServletDemo</servlet-name>
+		<url-pattern>/demo</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<!-- 在DispatcherServlet的初始化过程中，框架会在web应用的 WEB-INF文件夹下寻找名为[servlet-name]-servlet.xml 的配置文件，生成文件中定义的bean，此处就会寻找mvc-dispatcher-servlet.xml文件来加载spring的配置。
+			-->
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- <load-on-startup>1</load-on-startup>是启动顺序，让这个Servlet随Servlet容器一起启动 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<!--定义mvc-dispatcher这个servlet来处理所有匹配“/”的url
+				匹配到类似“/welcome”这样的路径型url，不会匹配到模式为*.jsp这样的后缀型url
+			-->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+    
+	<context-param>
+		<!-- contextConfigLocation这个参数名，是被spring定义好的，会去加载spring的配置文件-->
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
+	</context-param>
+
+	<listener>
+		<!-- 把 Spring 容器集成到 Web 应用里面 -->
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+    
+	<!-- 编码过滤器解决中文乱码,强制编码格式为UTF-8 -->  
+	<filter>  
+		<filter-name>encodingFilter</filter-name>  
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+		<init-param>  
+			<param-name>encoding</param-name>  
+			<param-value>UTF-8</param-value>  
+		</init-param>  
+		<init-param>  
+			<param-name>forceEncoding</param-name>  
+			<param-value>true</param-value>  
+		</init-param>  
+	</filter>  
+	<filter-mapping>  
+		<filter-name>encodingFilter</filter-name>  
+		<url-pattern>/*</url-pattern>  
+	</filter-mapping>  
+    
+</web-app>
